@@ -1,31 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <title>จองสถานที่ล่วงหน้า</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>พยากรณ์อากาศวันนี้</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container mt-4">
-    <h1>ระบบจองสถานที่</h1>
-    <form method="post" action="/book">
-        <input name="name" placeholder="ชื่อผู้จอง" class="form-control mb-2" required>
-        <select name="room" class="form-control mb-2">
-            <option value="" disabled selected>เลือกสถานที่</option>
-            {% for room in rooms %}
-                <option value="{{ room.id }}">612</option>
-                <option value="{{ room.id }}">624</option>
-                <option value="{{ room.id }}">635</option>
-                <option value="{{ room.id }}">โต๊ะหินอ่อน</option>
-                <option value="{{ room.id }}">โรงรถ</option>
-                <option value="{{ room.id }}">ข้างโรงอาหาร</option>
-                <option value="{{ room.id }}">โดมอเนกประสงค์</option>
-            {% endfor %}
-        </select>
-        <input type="date" name="date" class="form-control mb-2" required>
-        <input type="time" name="time" class="form-control mb-2" required>
-        <button class="btn btn-success">ยืนยันการจอง</button>
+  <div class="container">
+    <h1>🌤️ พยากรณ์อากาศวันนี้</h1>
+    <input type="text" id="cityInput" placeholder="กรอกชื่อเมือง เช่น Bangkok">
+    <button onclick="getWeather()">ค้นหา</button>
 
-    </form>
-</div>
+    <div id="weatherResult" class="card">
+      <!-- ผลลัพธ์จะอยู่ตรงนี้ -->
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

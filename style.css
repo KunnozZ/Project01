@@ -1,0 +1,36 @@
+body {
+  font-family: 'Prompt', sans-serif;
+  background: #f0f8ff;
+  text-align: center;
+  padding: 2rem;
+  margin: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+
+input {
+  padding: 0.5rem;
+  width: 60%;
+  max-width: 300px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  margin-left: 10px;
+  background: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.card {
+  margin-top: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
