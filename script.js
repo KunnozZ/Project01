@@ -1,39 +1,59 @@
-// ปรับฟังก์ชัน getWeatherClassic เพื่อแสดงไอคอนและข้อมูลสวยงามขึ้น
+const API_KEY = "7febccc953407aa9329823c1eca045d5"; // 🔁 ใส่ API Key จริงจาก openweathermap
+
+// สลับโหมด
+function showMode(mode) {
+  document.getElementById("classicMode").style.display = mode === "classic" ? "block" : "none";
+  document.getElementById("chatMode").style.display = mode === "chat" ? "block" : "none";
+}
+
+// ------------------ โหมดเดิม ------------------
 function getWeatherClassic() {
   const city = document.getElementById("cityInput").value.trim();
   if (!city) return;
+  fetchWeather(city, (text) => {
+    document.getElementById("weatherResult").innerText = text;
+  });
+}
 
+// ------------------ โหมดแชท ------------------
+function handleChat() {
+  const input = document.getElementById("chatInput");
+  const city = input.value.trim();
+  if (!city) return;
+  addChatMessage(city, "user");
+  input.value = "";
+  fetchWeather(city, (reply) => {
+    addChatMessage(reply, "bot");
+  });
+}
+
+function addChatMessage(text, sender = "bot") {
+  const box = document.getElementById("chatBox");
+  const div = document.createElement("div");
+  div.className = `msg ${sender}`;
+  div.textContent = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+// ------------------ ดึงข้อมูลอากาศ ------------------
+function fetchWeather(city, callback) {
   fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=th`
   )
     .then((res) => res.json())
     .then((data) => {
-      const weatherResult = document.getElementById("weatherResult");
       if (data.cod !== 200) {
-        weatherResult.innerHTML = `<p style="color:red;">ไม่พบข้อมูลสำหรับเมืองนี้</p>`;
+        callback("ไม่พบข้อมูลสำหรับเมืองนี้");
         return;
       }
-      const iconCode = data.weather[0].icon;
-      const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
       const desc = data.weather[0].description;
-      const temp = data.main.temp.toFixed(1);
-      const wind = data.wind.speed.toFixed(1);
-      const humidity = data.main.humidity;
-
-      weatherResult.innerHTML = `
-        <div class="card">
-          <img class="weather-icon" src="${iconUrl}" alt="${desc}" />
-          <div class="weather-info">
-            <div><b>${city}</b></div>
-            <div>อุณหภูมิ: ${temp}°C</div>
-            <div>สภาพอากาศ: ${desc}</div>
-            <div>ลม: ${wind} กม./ชม.</div>
-            <div>ความชื้น: ${humidity}%</div>
-          </div>
-        </div>
-      `;
+      const temp = data.main.temp;
+      const wind = data.wind.speed;
+      const reply = `${city} ตอนนี้ ${temp}°C ${desc}, ลม ${wind} กม./ชม.`;
+      callback(reply);
     })
     .catch(() => {
-      document.getElementById("weatherResult").innerHTML = `<p style="color:red;">เกิดข้อผิดพลาดในการเชื่อมต่อ</p>`;
+      callback("เกิดข้อผิดพลาดในการเชื่อมต่อ");
     });
 }
