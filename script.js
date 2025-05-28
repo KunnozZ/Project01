@@ -1,28 +1,59 @@
-const apiKey = "7febccc953407aa9329823c1eca045d5";
+const API_KEY = "YOUR_API_KEY"; // 🔁 ใส่ API Key จริงจาก openweathermap
 
-async function getWeather() {
+// สลับโหมด
+function showMode(mode) {
+  document.getElementById("classicMode").style.display = mode === "classic" ? "block" : "none";
+  document.getElementById("chatMode").style.display = mode === "chat" ? "block" : "none";
+}
+
+// ------------------ โหมดเดิม ------------------
+function getWeatherClassic() {
   const city = document.getElementById("cityInput").value.trim();
-  const result = document.getElementById("weatherResult");
-  result.innerHTML = "";
+  if (!city) return;
+  fetchWeather(city, (text) => {
+    document.getElementById("weatherResult").innerText = text;
+  });
+}
 
-  if (!city) return alert("กรุณากรอกชื่อเมือง");
+// ------------------ โหมดแชท ------------------
+function handleChat() {
+  const input = document.getElementById("chatInput");
+  const city = input.value.trim();
+  if (!city) return;
+  addChatMessage(city, "user");
+  input.value = "";
+  fetchWeather(city, (reply) => {
+    addChatMessage(reply, "bot");
+  });
+}
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=th`;
+function addChatMessage(text, sender = "bot") {
+  const box = document.getElementById("chatBox");
+  const div = document.createElement("div");
+  div.className = `msg ${sender}`;
+  div.textContent = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
 
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("ไม่พบข้อมูล");
-    const data = await res.json();
-
-    result.innerHTML = `
-      <h2>📍 ${data.name}</h2>
-      <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="${data.weather[0].description}">
-      <p>🌤️ ${data.weather[0].description}</p>
-      <p>🌡️ อุณหภูมิ: ${data.main.temp} °C</p>
-      <p>💧 ความชื้น: ${data.main.humidity}%</p>
-      <p>💨 ลม: ${data.wind.speed} km/h</p>
-    `;
-  } catch (error) {
-    result.innerHTML = `<p style="color: red;">❌ ${error.message}</p>`;
-  }
+// ------------------ ดึงข้อมูลอากาศ ------------------
+function fetchWeather(city, callback) {
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=th`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.cod !== 200) {
+        callback("ไม่พบข้อมูลสำหรับเมืองนี้");
+        return;
+      }
+      const desc = data.weather[0].description;
+      const temp = data.main.temp;
+      const wind = data.wind.speed;
+      const reply = `${city} ตอนนี้ ${temp}°C ${desc}, ลม ${wind} กม./ชม.`;
+      callback(reply);
+    })
+    .catch(() => {
+      callback("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+    });
 }

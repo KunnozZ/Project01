@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>พยากรณ์อากาศวันนี้</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>พยากรณ์อากาศ 2 โหมด</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🌤️ พยากรณ์อากาศปัจจุบัน</h1>
-    <input type="text" id="cityInput" placeholder="กรอกชื่อสถานที่ เช่น Bangkok">
-    <button onclick="getWeather()">ค้นหา</button>
+    <h1>🌤️ พยากรณ์อากาศ</h1>
+    <div class="mode-switch">
+      <button onclick="showMode('classic')">🔍 โหมดปกติ</button>
+      <button onclick="showMode('chat')">💬 โหมดแชท</button>
+    </div>
 
-    <div id="weatherResult" class="card">
+    <!-- โหมดเดิม -->
+    <div id="classicMode">
+      <input type="text" id="cityInput" placeholder="กรอกชื่อเมือง เช่น Bangkok" />
+      <button onclick="getWeatherClassic()">ค้นหา</button>
+      <div id="weatherResult" class="card"></div>
+    </div>
+
+    <!-- โหมดแชท -->
+    <div id="chatMode" style="display: none;">
+      <div id="chatBox" class="chat-box"></div>
+      <div class="input-area">
+        <input type="text" id="chatInput" placeholder="พิมพ์ชื่อเมือง" />
+        <button onclick="handleChat()">ส่ง</button>
+      </div>
     </div>
   </div>
 
