@@ -1,4 +1,4 @@
-const API_KEY = "7febccc953407aa9329823c1eca045d5"; // 🔁 ใส่ API Key จริงจาก openweathermap
+const API_KEY = "21e5c24721bf3a24456717c359a41932"; // 🔁 ใส่ API Key จริงจาก openweathermap
 
 // สลับโหมด
 function showMode(mode) {
