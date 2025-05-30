@@ -47,13 +47,18 @@ function fetchWeather(city, callback) {
         callback("ไม่พบข้อมูลสำหรับเมืองนี้");
         return;
       }
-      const desc = data.weather[0].description;
-      const temp = data.main.temp;
-      const wind = data.wind.speed;
-      const reply = `${city} ตอนนี้ ${temp}°C ${desc}, ลม ${wind} กม./ชม.`;
-      callback(reply);
-    })
-    .catch(() => {
-      callback("เกิดข้อผิดพลาดในการเชื่อมต่อ");
-    });
+
+      const reply = `
+       📍 ${data.name}
+       🌤️ ${data.weather[0].description}
+       🌡️ อุณหภูมิ: ${data.main.temp} °C
+       💧 ความชื้น: ${data.main.humidity}%
+       💨 ลม: ${data.wind.speed} km/h
+    `.trim();
+
+    callback(reply);
+  })
+  .catch(() => {
+    callback("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+  });
 }
