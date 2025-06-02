@@ -36,7 +36,7 @@ async function handleEvent(event) {
 }
 
 // ตั้งเวลาแจ้งเตือนทุกวัน 07:00
-cron.schedule("1 1 * 1 5", async () => {
+cron.schedule("1 3 * * *", async () => {
   const weather = await getWeather("Bangkok");
   await client.pushMessage(process.env.USER_ID, {
     type: "text",
