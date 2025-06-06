@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,8 +16,17 @@
       border-radius: 10px;
       overflow: hidden;
     }
+
+    .layer-buttons {
+      margin-top: 10px;
+    }
+
+    .layer-buttons button {
+      margin-right: 5px;
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>🌤️ พยากรณ์อากาศ</h1>
@@ -40,12 +50,18 @@
         <button onclick="handleChat()">ส่ง</button>
       </div>
     </div>
-     <!-- 🌧️ แผนที่เรดาร์ฝน -->
+    <!-- 🌧️ แผนที่เรดาร์ฝน -->
     <h2>🗺️ แผนที่</h2>
+    <div class="layer-buttons">
+      <button onclick="changeLayer('precipitation_new')">🌧️ ฝน</button>
+      <button onclick="changeLayer('clouds_new')">☁️ เมฆ</button>
+      <button onclick="changeLayer('temp_new')">🌡️ อุณหภูมิ</button>
+      <button onclick="changeLayer('wind_new')">💨 ลม</button>
+    </div>
     <div id="map"></div>
   </div>
 
-<!-- Leaflet JS -->
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
   <script>
     const map = L.map('map').setView([13.7563, 100.5018], 6); // Bangkok
@@ -54,6 +70,39 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+
+    let weatherLayer = null;
+
+    function changeLayer(type) {
+      if (weatherLayer) {
+        map.removeLayer(weatherLayer);
+      }
+      weatherLayer = L.tileLayer(`https://tile.openweathermap.org/map/${type}/{z}/{x}/{y}.png?appid=${apiKey}`, {
+        attribution: 'Weather data © OpenWeatherMap',
+        opacity: 0.6
+      });
+      weatherLayer.addTo(map);
+    }
+
+    // เริ่มต้นด้วยฝน
+    changeLayer('precipitation_new');
+
+    // แสดงตำแหน่งผู้ใช้
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+          L.marker([userLat, userLng]).addTo(map)
+            .bindPopup("📍 ตำแหน่งของคุณ").openPopup();
+          map.setView([userLat, userLng], 8);
+        },
+        () => {
+          console.log("❗ ปฏิเสธการเข้าถึงตำแหน่ง");
+        }
+      );
+    }
+
 
     // ชั้นเรดาร์ฝนจาก OpenWeatherMap (ใส่ API Key ของคุณ)
     const apiKey = '21e5c24721bf3a24456717c359a41932'; // 👉 แก้ตรงนี้
@@ -66,4 +115,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
