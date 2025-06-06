@@ -61,6 +61,72 @@
     <div id="map"></div>
   </div>
 
+<script>
+
+  // 🌗 AUTO THEME ตามเวลา
+  function autoTheme() {
+    const hour = new Date().getHours();
+    if (hour >= 18 || hour < 6) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  }
+  autoTheme();
+
+  // 🧭 ใช้ตำแหน่งผู้ใช้ดึงสภาพอากาศ ณ จุดนั้น
+  function getWeatherAtLocation(lat, lon) {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=th`)
+      .then(res => res.json())
+      .then(data => {
+        const city = data.name;
+        const temp = data.main.temp;
+        const weather = data.weather[0].description;
+        const alert = `คุณอยู่ที่ ${city} อุณหภูมิ ${temp}°C - ${weather}`;
+
+        // แสดงบนหน้าเว็บ
+        const resultDiv = document.createElement('div');
+        resultDiv.textContent = alert;
+        document.querySelector('.container').prepend(resultDiv);
+
+        // 🔔 แจ้งเตือนถ้าเจอฝน/พายุ
+        if (Notification.permission === "granted" && /ฝน|พายุ|ลม/i.test(weather)) {
+          new Notification("แจ้งเตือนอากาศ", {
+            body: alert,
+            icon: "https://openweathermap.org/img/wn/10d.png"
+          });
+        }
+      });
+  }
+
+  // 🚩 ขอสิทธิ์ Notification
+  if ("Notification" in window) {
+    Notification.requestPermission();
+  }
+
+  // 📍 ตำแหน่งผู้ใช้ + ดึงสภาพอากาศ
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      getWeatherAtLocation(lat, lon);
+    });
+  }
+</script>
+
+<!-- ธีมกลางคืน -->
+<style>
+  .dark-theme {
+    background-color: #121212;
+    color: white;
+  }
+  .dark-theme .card, .dark-theme .chat-box, .dark-theme input, .dark-theme button {
+    background-color: #1e1e1e;
+    color: white;
+    border: 1px solid #444;
+  }
+</style>
+
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
   <script>
