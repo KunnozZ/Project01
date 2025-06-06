@@ -62,3 +62,33 @@ function fetchWeather(city, callback) {
     callback("เกิดข้อผิดพลาดในการเชื่อมต่อ");
   });
 }
+
+function changeLayer(type) {
+  if (weatherLayer) {
+    map.removeLayer(weatherLayer);
+  }
+  weatherLayer = L.tileLayer(`https://tile.openweathermap.org/map/${type}/{z}/{x}/{y}.png?appid=${apiKey}`, {
+    attribution: 'Weather data © OpenWeatherMap',
+    opacity: 0.6
+  });
+  weatherLayer.addTo(map);
+
+  // 🔤 อัปเดตข้อความคำอธิบาย
+  const hint = document.getElementById('layerHint');
+  switch (type) {
+    case 'precipitation_new':
+      hint.textContent = "แสดงปริมาณน้ำฝนตามพื้นที่";
+      break;
+    case 'clouds_new':
+      hint.textContent = "แสดงความหนาแน่นของกลุ่มเมฆ";
+      break;
+    case 'temp_new':
+      hint.textContent = "แสดงอุณหภูมิพื้นผิวทั่วประเทศ";
+      break;
+    case 'wind_new':
+      hint.textContent = "แสดงความเร็วและทิศทางลม";
+      break;
+    default:
+      hint.textContent = "";
+  }
+}

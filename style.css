@@ -85,3 +85,33 @@ h1 {
 .input-area button {
   padding: 10px 20px;
 }
+
+/* ธีมตามสภาพอากาศ */
+body.clear {
+  background: linear-gradient(to bottom, #87ceeb, #fff);
+}
+
+body.rain {
+  background: linear-gradient(to bottom, #4b79a1, #283e51);
+}
+
+body.clouds {
+  background: linear-gradient(to bottom, #bdc3c7, #2c3e50);
+}
+
+body.snow {
+  background: linear-gradient(to bottom, #e0eafc, #cfdef3);
+}
+
+body.storm {
+  background: radial-gradient(#2c3e50, #000000);
+}
+
+body.default {
+  background: #f0f0f0;
+}
+
+#layerHint {
+  font-style: italic;
+  color: #555;
+}
