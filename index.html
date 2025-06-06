@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Weather Forecast</title>
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 400px;
+      margin-top: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -29,7 +40,29 @@
         <button onclick="handleChat()">ส่ง</button>
       </div>
     </div>
+     <!-- 🌧️ แผนที่เรดาร์ฝน -->
+    <h2>🗺️ แผนที่เรดาร์ฝน (ประเทศไทย)</h2>
+    <div id="map"></div>
   </div>
+
+<!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([13.7563, 100.5018], 6); // Bangkok
+
+    // พื้นหลัง OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // ชั้นเรดาร์ฝนจาก OpenWeatherMap (ใส่ API Key ของคุณ)
+    const apiKey = '21e5c24721bf3a24456717c359a41932'; // 👉 แก้ตรงนี้
+
+    const rainLayer = L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`, {
+      attribution: 'Weather data © OpenWeatherMap',
+      opacity: 0.6
+    }).addTo(map);
+  </script>
 
   <script src="script.js"></script>
 </body>
