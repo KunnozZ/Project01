@@ -63,16 +63,6 @@ function fetchWeather(city, callback) {
   });
 }
 
-function changeLayer(type) {
-  if (weatherLayer) {
-    map.removeLayer(weatherLayer);
-  }
-  weatherLayer = L.tileLayer(`https://tile.openweathermap.org/map/${type}/{z}/{x}/{y}.png?appid=${apiKey}`, {
-    attribution: 'Weather data © OpenWeatherMap',
-    opacity: 0.6
-  });
-  weatherLayer.addTo(map);
-
   // 🔤 อัปเดตข้อความคำอธิบาย
   const hint = document.getElementById('layerHint');
   switch (type) {
@@ -90,5 +80,16 @@ function changeLayer(type) {
       break;
     default:
       hint.textContent = "";
+
+function changeLayer(type) {
+  if (weatherLayer) {
+    map.removeLayer(weatherLayer);
+  }
+  weatherLayer = L.tileLayer(`https://tile.openweathermap.org/map/${type}/{z}/{x}/{y}.png?appid=${apiKey}`, {
+    attribution: 'Weather data © OpenWeatherMap',
+    opacity: 0.6
+  });
+  weatherLayer.addTo(map);
+
   }
 }
